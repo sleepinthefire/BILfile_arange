@@ -1,0 +1,16 @@
+#BILデータのglid length × glid lengthマスごとの平均をとってsave_folderにcsvを保存
+def mean_csv(BIL_data, save_folder, nLayer=204, pixel_size=512, glid_length=32):
+    number_of_glid = pixel_size // glid_length
+    
+    def mean(layer, row, column):
+        glid_mean = np.mean(BIL_data[(glid_length*row) : glid_length*(row+1), (layer*pixel_size) + glid_length * column : (layer*pixel_size) + glid_length * (column+1)])
+        return glid_mean
+    
+    
+    for row in range(number_of_glid):
+        for column in range(number_of_glid):
+            mean_list = []
+            for layer in range(nLayer):
+                mean_list.append(mean(layer,row,column))
+            mean_np = np.array(mean_list)
+            np.savetxt(save_folder + '/mean' + str(row) + '_' + str(column) + '.csv', mean_np, delimiter=',')
