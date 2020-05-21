@@ -1,3 +1,6 @@
+raw_data = np.fromfile('REFLECTANCE_Y-M-M_No.dat', dtype = 'float32')
+BIL_data = raw_data.reshape(512,204*512)
+
 #BILデータのglid length × glid lengthマスごとの平均をとってsave_folderにcsvを保存
 def mean_csv(BIL_data, save_folder, nLayer=204, pixel_size=512, glid_length=32):
     number_of_glid = pixel_size // glid_length
