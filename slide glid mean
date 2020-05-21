@@ -1,0 +1,17 @@
+raw_data = np.fromfile('REFLECTANCE_Y-M-M_No.dat', dtype = 'float32')
+BIL_data = raw_data.reshape(512,204*512)
+
+#extract overwrapped mean from BIL data and save as csv. slide の分だけ移動していく　デフォルトではぐりっとの大きさは３２＊３２で16ピクセルごとに移動していく
+def mean_csv_slide(BIL_data, save_folder, nLayer=204, pixel_size=512, glid_length=32, slide=16):
+
+    def mean(layer, x, y):
+        glid_mean = np.mean(BIL_data[ slide*y : slide*y + glid_length, ( layer * pixel_size ) + slide*x : (layer*pixel_size) + slide*x + glid_length ])
+        return glid_mean
+    
+    for row in range((512 - glid_length)//slide):
+        for column in range((512 - glid_length)//slide):
+            mean_list = []
+            for layer in range(nLayer):
+                mean_list.append(mean(layer,row,column))
+            mean_np = np.array(mean_list)
+            np.savetxt(save_folder + '/mean' + str(row) + '_' + str(column) + '.csv', mean_np, delimiter=',')
