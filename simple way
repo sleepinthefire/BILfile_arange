@@ -1,0 +1,10 @@
+import numpy as np
+
+#get hyperspectrum data and convert it into 2dim.(Using specimIQ you can get the file like 'REFLECTANCE_Y_M_D_No.dat') データキューブを一次元で取得しBILの意味ある二次元配列に並べ替える
+raw_data = np.fromfile('REFLECTANCE_Y_M_D_No.dat', dtype = 'float32')
+BIL_data = raw_data.reshape(512,204*512)
+
+#save each layer as csv
+for x in range(204):
+    layer_x = BIL_data[:512,x*512:(x+1)*512]
+    np.savetxt('C:/Users/new_-/Desktop/separator/layer' + str(x) + '.csv', layer_x, delimiter = ',')
